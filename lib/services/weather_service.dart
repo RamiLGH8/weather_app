@@ -6,18 +6,11 @@ import 'package:geocoding/geocoding.dart';
 
 class WeatherService {
   static final BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
-  final apiKey;
+  final String apiKey;
 
   WeatherService({required this.apiKey});
 
-  Future<WeatherModel> getWeather(String city) async {
-    String ct = city;
 
-    final response = await http.get(Uri.parse('$BASE_URL?q=$ct&appid=$apiKey&units=metric'));
-    print(response.toString());
-
-    return WeatherModel.fromMap(jsonDecode(response.body));
-  }
 
   Future<String> getCurrentLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -34,5 +27,18 @@ class WeatherService {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
     String city = placemarks[0].locality!;
     return city;
+  }
+
+
+  
+    Future<WeatherModel> getWeather(String city) async {
+    final response = await http.get(Uri.parse('$BASE_URL?q=$city&appid=$apiKey&units=metric'));
+
+  
+    if (response.statusCode== 200) {
+       return WeatherModel.fromMap(jsonDecode(response.body));    }
+    else{
+      throw Exception('Error fetching weather data');
+    }
   }
 }

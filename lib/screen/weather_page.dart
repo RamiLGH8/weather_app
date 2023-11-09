@@ -10,23 +10,22 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  final _weatherService = WeatherService(apiKey: '6708f4e44d161b6f51e1866d588a406c');
+  final _weatherService =
+      WeatherService(apiKey: '6708f4e44d161b6f51e1866d588a406c');
   WeatherModel? _weather;
-  String _errorMessage = '';
+
 
   fetchWeather() async {
-    try {
-      final city = await _weatherService.getCurrentLocation();
+   
+      String city = await _weatherService.getCurrentLocation();
+      print(city);
       final weather = await _weatherService.getWeather(city);
+      print(weather);
       setState(() {
         _weather = weather;
       });
-    } catch (e) {
-      print(e);
-      setState(() {
-        _errorMessage = 'Error fetching weather data';
-      });
-    }
+      print(_weather?.city);
+   
   }
 
   @override
@@ -41,9 +40,7 @@ class _WeatherPageState extends State<WeatherPage> {
       debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
-          body: _errorMessage.isNotEmpty
-              ? Center(child: Text(_errorMessage))
-              : _weather == null
+          body: _weather == null
                   ? Center(child: CircularProgressIndicator())
                   : Center(
                       child: Column(
