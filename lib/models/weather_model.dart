@@ -23,7 +23,5 @@ class WeatherModel {
         sunRise = DateTime.fromMillisecondsSinceEpoch(json['sys']['sunrise'] * 1000),
         sunSet = DateTime.fromMillisecondsSinceEpoch(json['sys']['sunset'] * 1000);
 
-  String formattedTime(DateTime time) {
-    return '${time.hour}:${time.minute}';
-  }
+
 }

@@ -18,21 +18,23 @@ class _WeatherPageState extends State<WeatherPage> {
   fetchWeather() async {
     String city = await _weatherService.getCurrentLocation();
     print(city);
-    final weather = await _weatherService.getWeather(city);
+    final weather = await _weatherService.getWeather('Ain Benian');
 
     setState(() {
       _weather = weather;
     });
-    print(weather.formattedTime(_weather!.time));
+ 
     print(_weather?.city);
   }
 
   String getLottieAsset(
-      String desc, String time, String sunRise, String sunSet) {
+      String desc, String time, DateTime sunRise, DateTime sunSet) {
     print(desc);
     print(time);
     print(sunRise);
     print(sunSet);
+   
+    
     if (desc.toLowerCase().contains('clouds')) {
       return 'assets/cloudy.json';
     }
@@ -50,9 +52,6 @@ class _WeatherPageState extends State<WeatherPage> {
     //     time.compareTo(sunSet) == -1) {
     //   return 'assets/sunny.json';
     // }
-    if (desc.toLowerCase().contains('clear') && time.compareTo(sunRise) == -1) {
-      return 'assets/night_clear.json';
-    }
 
     switch (desc.toLowerCase()) {
       case 'mist':
@@ -64,9 +63,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case 'drizzle':
         return 'assets/rainy.json';
       default:
-        if (time.compareTo(sunRise) == 1 && time.compareTo(sunSet) == -1)
-          return 'assets/sunny.json';
-        else
+      
           return 'assets/night_clear.json';
     }
   }
@@ -97,9 +94,9 @@ class _WeatherPageState extends State<WeatherPage> {
                         Text(_weather!.temp.toInt().toString() + '°C'),
                         Lottie.asset(getLottieAsset(
                             _weather!.desc,
-                            _weather!.formattedTime(_weather!.time),
-                            _weather!.formattedTime(_weather!.sunRise),
-                            _weather!.formattedTime(_weather!.sunSet))),
+                            _weather!.time.toString(),
+                            _weather!.sunRise,
+                            _weather!.sunSet)),
                       ],
                     ),
                   ),
